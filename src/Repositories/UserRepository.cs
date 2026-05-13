@@ -1,47 +1,27 @@
 using System;
 using System.Threading.Tasks;
+using MY_APP.Models;
 using Microsoft.EntityFrameworkCore;
-using MyProject.Models;
 
-namespace MyProject.Repositories
+namespace MY_APP.Repositories
 {
+    public interface IUserRepository
+    {
+        Task<User> GetUserByUsernameAsync(string username);
+    }
+
     public class UserRepository : IUserRepository
     {
-        private readonly AppDbContext _context;
+        private readonly MyAppDbContext _context;
 
-        public UserRepository(AppDbContext context)
+        public UserRepository(MyAppDbContext context)
         {
             _context = context;
         }
 
-        public async Task AddUserAsync(User user)
+        public async Task<User> GetUserByUsernameAsync(string username)
         {
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
+            return await _context.Users.SingleOrDefaultAsync(u => u.Username == username);
         }
-
-        public async Task<User> GetUserByEmailAsync(string email)
-        {
-            return await _context.Users.SingleOrDefaultAsync(u => u.Email == email);
-        }
-
-        public async Task<User> GetUserByIdAsync(Guid userId)
-        {
-            return await _context.Users.FindAsync(userId);
-        }
-
-        public async Task UpdateUserAsync(User user)
-        {
-            _context.Users.Update(user);
-            await _context.SaveChangesAsync();
-        }
-    }
-
-    public interface IUserRepository
-    {
-        Task AddUserAsync(User user);
-        Task<User> GetUserByEmailAsync(string email);
-        Task<User> GetUserByIdAsync(Guid userId);
-        Task UpdateUserAsync(User user);
     }
 }

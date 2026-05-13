@@ -1,13 +1,9 @@
 CREATE PROCEDURE usp_CreateUser
-    @UserId UNIQUEIDENTIFIER OUT,
-    @Username NVARCHAR(100),
-    @Email NVARCHAR(255),
-    @PasswordHash VARBINARY(MAX)
+    @Username NVARCHAR(256),
+    @PasswordHash NVARCHAR(256)
 AS
 BEGIN
     SET NOCOUNT ON;
-
-    SET @UserId = NEWSEQUENTIALID();
-    INSERT INTO Users (UserId, Username, Email, PasswordHash, CreatedAt, UpdatedAt)
-    VALUES (@UserId, @Username, @Email, @PasswordHash, GETDATE(), GETDATE());
+    INSERT INTO Users (Username, PasswordHash, CreatedAt, UpdatedAt)
+    VALUES (@Username, @PasswordHash, GETDATE(), GETDATE());
 END

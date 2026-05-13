@@ -1,14 +1,18 @@
-using System;
+using System.ComponentModel.DataAnnotations;
 
-namespace MyProject.Models
+namespace MY_APP.Models
 {
     public class User
     {
-        public Guid UserId { get; set; }
+        [Key]
+        public int UserId { get; set; }
+
+        [Required]
+        [MaxLength(256)]
         public string Username { get; set; }
-        public string Email { get; set; }
-        public byte[] PasswordHash { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+
+        [Required]
+        [MaxLength(256)]
+        public string PasswordHash { get; set; }
     }
 }

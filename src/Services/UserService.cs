@@ -1,72 +1,69 @@
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
-using MY_APP.DTOs;
-using MY_APP.Models;
-using MY_APP.Repositories;
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using MyApp.Repositories;
+using MyApp.DTOs;
+using MyApp.Models;
+using System.Security.Cryptography;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System;
+using System.Text;
 
-namespace MY_APP.Services
+namespace MyApp.Services
 {
     public interface IUserService
     {
-        Task<LoginResponseDto> AuthenticateAsync(LoginRequestDto requestDto);
+        Task<(string token, int userId, string error)> AuthenticateAsync(UserLoginDTO userLoginDTO);
     }
 
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
-        private readonly IConfiguration _configuration;
         private readonly ILogger<UserService> _logger;
 
-        public UserService(IUserRepository userRepository, IConfiguration configuration, ILogger<UserService> logger)
+        public UserService(IUserRepository userRepository, ILogger<UserService> logger)
         {
             _userRepository = userRepository;
-            _configuration = configuration;
             _logger = logger;
         }
 
-        public async Task<LoginResponseDto> AuthenticateAsync(LoginRequestDto requestDto)
+        public async Task<(string token, int userId, string error)> AuthenticateAsync(UserLoginDTO userLoginDTO)
         {
-            var user = await _userRepository.GetUserByUsernameAsync(requestDto.Username);
-            if (user == null || !VerifyPassword(requestDto.Password, user.PasswordHash, user.Salt))
+            var user = await _userRepository.FindByEmailAsync(userLoginDTO.Email);
+
+            if (user == null)
             {
-                return null;
+                return (null, 0, "Invalid credentials.");
+            }
+
+            if (!VerifyPassword(userLoginDTO.Password, user.PasswordHash))
+            {
+                return (null, 0, "Invalid credentials.");
             }
 
             var token = GenerateJwtToken(user);
-            return new LoginResponseDto { Token = token, Message = "Login successful." };
+            return (token, user.UserId, null);
+        }
+
+        private bool VerifyPassword(string password, string storedHash)
+        {
+            using var hmac = new HMACSHA512(Encoding.UTF8.GetBytes(storedHash));
+            var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+            return storedHash == Convert.ToBase64String(computedHash);
         }
 
         private string GenerateJwtToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["JwtConfig:Key"]);
+            var key = Encoding.ASCII.GetBytes("YourSecretKeyHere"); // replace with a real secret
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, user.Username) }),
-                Expires = DateTime.UtcNow.AddHours(1),
+                Subject = new System.Security.Claims.ClaimsIdentity(new[] { new System.Security.Claims.Claim("id", user.UserId.ToString()) }),
+                Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
-        }
-
-        private bool VerifyPassword(string password, byte[] storedHash, byte[] storedSalt)
-        {
-            using (var hmac = new System.Security.Cryptography.HMACSHA512(storedSalt))
-            {
-                var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-                for (int i = 0; i < computedHash.Length; i++)
-                {
-                    if (computedHash[i] != storedHash[i]) return false;
-                }
-            }
-            return true;
         }
     }
 }

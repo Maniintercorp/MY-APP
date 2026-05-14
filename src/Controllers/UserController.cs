@@ -1,12 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using MY_APP.DTOs;
+using MY_APP.Services;
 using Microsoft.Extensions.Logging;
-using MyApp.Services;
-using MyApp.DTOs;
-using MyApp.Validators;
-using FluentValidation.Results;
 
-namespace MyApp.Controllers
+namespace MY_APP.Controllers
 {
     [ApiController]
     [Route("api/auth")]
@@ -22,35 +20,21 @@ namespace MyApp.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] UserLoginDTO userLoginDTO)
+        public async Task<IActionResult> Login(LoginRequestDto loginRequest)
         {
-            var validator = new UserLoginValidator();
-            ValidationResult result = validator.Validate(userLoginDTO);
-
-            if (!result.IsValid)
+            if (!ModelState.IsValid)
             {
-                foreach (var failure in result.Errors)
-                {
-                    ModelState.AddModelError(failure.PropertyName, failure.ErrorMessage);
-                }
-
                 return BadRequest(ModelState);
             }
 
-            try
+            var result = await _userService.AuthenticateAsync(loginRequest);
+
+            if (result == null)
             {
-                var (token, userId, error) = await _userService.AuthenticateAsync(userLoginDTO);
-                if (!string.IsNullOrEmpty(error))
-                {
-                    return Unauthorized(new { error });
-                }
-                return Ok(new { token, userId, error = (string)null });
+                return Unauthorized();
             }
-            catch (System.Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred during login.");
-                return StatusCode(500, new { error = "An internal server error occurred." });
-            }
+
+            return Ok(result);
         }
     }
 }

@@ -1,0 +1,1 @@
+-- No initial seed data is necessary for the Users table as per current requirements.

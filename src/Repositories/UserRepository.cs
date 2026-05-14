@@ -1,26 +1,26 @@
-using Microsoft.EntityFrameworkCore;
-using MY_APP.Models;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using MyApp.Models;
 
-namespace MY_APP.Repositories
+namespace MyApp.Repositories
 {
     public interface IUserRepository
     {
-        Task<User> GetUserByUsernameAsync(string username);
+        Task<User> FindByEmailAsync(string email);
     }
 
     public class UserRepository : IUserRepository
     {
-        private readonly DataContext _context;
+        private readonly MyAppDbContext _context;
 
-        public UserRepository(DataContext context)
+        public UserRepository(MyAppDbContext context)
         {
             _context = context;
         }
 
-        public async Task<User> GetUserByUsernameAsync(string username)
+        public async Task<User> FindByEmailAsync(string email)
         {
-            return await _context.Users.SingleOrDefaultAsync(x => x.Username == username);
+            return await _context.Users.SingleOrDefaultAsync(u => u.Email == email);
         }
     }
 }

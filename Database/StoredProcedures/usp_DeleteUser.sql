@@ -1,11 +1,11 @@
 CREATE PROCEDURE usp_DeleteUser
-    @UserId INT
+	@UserId INT
 AS
 BEGIN
-    SET NOCOUNT ON;
+	SET NOCOUNT ON;
 
-    UPDATE Users
-    SET IsDeleted = 1, 
-        UpdatedAt = GETUTCDATE()
-    WHERE UserId = @UserId;
+	UPDATE Users
+	SET IsDeleted = 1, 
+	    UpdatedAt = GETUTCDATE()
+	WHERE UserId = @UserId;
 END

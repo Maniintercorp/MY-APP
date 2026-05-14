@@ -1,69 +1,51 @@
 using System.Threading.Tasks;
+using MY_APP.DTOs;
+using MY_APP.Repositories;
+using MY_APP.Models;
+using MY_APP.Services.Interfaces;
 using Microsoft.Extensions.Logging;
-using MyApp.Repositories;
-using MyApp.DTOs;
-using MyApp.Models;
-using System.Security.Cryptography;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System;
-using System.Text;
 
-namespace MyApp.Services
+namespace MY_APP.Services
 {
-    public interface IUserService
-    {
-        Task<(string token, int userId, string error)> AuthenticateAsync(UserLoginDTO userLoginDTO);
-    }
-
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IJwtTokenService _jwtTokenService;
         private readonly ILogger<UserService> _logger;
 
-        public UserService(IUserRepository userRepository, ILogger<UserService> logger)
+        public UserService(IUserRepository userRepository, IJwtTokenService jwtTokenService, ILogger<UserService> logger)
         {
             _userRepository = userRepository;
+            _jwtTokenService = jwtTokenService;
             _logger = logger;
         }
 
-        public async Task<(string token, int userId, string error)> AuthenticateAsync(UserLoginDTO userLoginDTO)
+        public async Task<LoginResponseDto> AuthenticateAsync(LoginRequestDto loginRequest)
         {
-            var user = await _userRepository.FindByEmailAsync(userLoginDTO.Email);
+            var user = await _userRepository.GetUserByEmailAsync(loginRequest.Email);
 
-            if (user == null)
+            if (user == null || !VerifyPassword(loginRequest.Password, user.PasswordHash))
             {
-                return (null, 0, "Invalid credentials.");
+                _logger.LogWarning("Invalid login attempt for email: {Email}", loginRequest.Email);
+                return null;
             }
 
-            if (!VerifyPassword(userLoginDTO.Password, user.PasswordHash))
+            var token = _jwtTokenService.GenerateToken(user);
+            var refreshToken = _jwtTokenService.GenerateRefreshToken();
+
+            return new LoginResponseDto
             {
-                return (null, 0, "Invalid credentials.");
-            }
-
-            var token = GenerateJwtToken(user);
-            return (token, user.UserId, null);
-        }
-
-        private bool VerifyPassword(string password, string storedHash)
-        {
-            using var hmac = new HMACSHA512(Encoding.UTF8.GetBytes(storedHash));
-            var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-            return storedHash == Convert.ToBase64String(computedHash);
-        }
-
-        private string GenerateJwtToken(User user)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("YourSecretKeyHere"); // replace with a real secret
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new System.Security.Claims.ClaimsIdentity(new[] { new System.Security.Claims.Claim("id", user.UserId.ToString()) }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                Token = token,
+                ExpiresIn = 3600, // Example expiration time (1 hour)
+                RefreshToken = refreshToken
             };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+        }
+
+        private bool VerifyPassword(string password, byte[] passwordHash)
+        {
+            // Implement your password verification logic here
+            // This is just a placeholder	
+            return true;
         }
     }
 }

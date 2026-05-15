@@ -4,37 +4,38 @@ using FluentAssertions;
 using MyApplication.Services;
 using MyApplication.Repositories;
 
-public class UserServiceTests {
+public class UserServiceTests
+{
     private readonly Mock<IUserRepository> _userRepositoryMock;
     private readonly UserService _userService;
 
-    public UserServiceTests() {
+    public UserServiceTests()
+    {
         _userRepositoryMock = new Mock<IUserRepository>();
         _userService = new UserService(_userRepositoryMock.Object);
     }
 
     [Fact]
-    public void RegisterUser_ShouldCallAddOnRepository_WhenDataIsValid() {
-        // Arrange
-        var user = new User { Username = "test", PasswordHash = "hash", Email = "test@example.com" };
+    public async Task GetUserById_ShouldReturnUser_WhenUserExists()
+    {
+        var userId = 1;
+        var user = new User { Id = userId, Username = "testuser", Email = "testuser@example.com" };
+        _userRepositoryMock.Setup(repo => repo.GetUserByIdAsync(userId)).ReturnsAsync(user);
 
-        // Act
-        _userService.RegisterUser(user);
+        var result = await _userService.GetUserByIdAsync(userId);
 
-        // Assert
-        _userRepositoryMock.Verify(repo => repo.Add(user), Times.Once);
+        result.Should().NotBeNull();
+        result.Username.Should().Be("testuser");
     }
 
     [Fact]
-    public void RegisterUser_ShouldThrowException_WhenUserAlreadyExists() {
-        // Arrange
-        var user = new User { Username = "test", PasswordHash = "hash", Email = "test@example.com" };
-        _userRepositoryMock.Setup(repo => repo.FindByEmail(user.Email)).Returns(user);
+    public async Task GetUserById_ShouldReturnNull_WhenUserDoesNotExist()
+    {
+        var userId = 1;
+        _userRepositoryMock.Setup(repo => repo.GetUserByIdAsync(userId)).ReturnsAsync((User)null);
 
-        // Act
-        Action act = () => _userService.RegisterUser(user);
+        var result = await _userService.GetUserByIdAsync(userId);
 
-        // Assert
-        act.Should().Throw<Exception>().WithMessage("User already exists");
+        result.Should().BeNull();
     }
 }

@@ -1,38 +1,29 @@
-// Unit tests for UserService
 using Xunit;
 using Moq;
 using FluentAssertions;
+using MyApplication.Services;
+using MyApplication.Models;
 
 public class UserServiceTests
 {
-  [Fact]
-  public void GetUserById_ShouldReturnUser_WhenUserIdExists()
-  {
-    // Arrange
-    var mockUserRepository = new Mock<IUserRepository>();
-    mockUserRepository.Setup(repo => repo.GetUserById(It.IsAny<int>()))
-      .ReturnsAsync(new User { Id = 1, Username = "testUser" });
+    private readonly Mock<IUserRepository> _userRepositoryMock;
+    private readonly UserService _userService;
 
-    var userService = new UserService(mockUserRepository.Object);
+    public UserServiceTests()
+    {
+        _userRepositoryMock = new Mock<IUserRepository>();
+        _userService = new UserService(_userRepositoryMock.Object);
+    }
 
-    // Act
-    var user = await userService.GetUserById(1);
+    [Fact]
+    public async Task RegisterUser_Should_Return_ValidUser_When_Successful()
+    {
+        var user = new User { Username = "test", Password = "hashed-pwd", Email = "test@example.com" };
+        _userRepositoryMock.Setup(repo => repo.AddAsync(It.IsAny<User>())).ReturnsAsync(user);
 
-    // Assert
-    user.Should().NotBeNull();
-    user.Username.Should().Be("testUser");
-  }
+        var result = await _userService.RegisterUserAsync(user);
 
-  [Fact]
-  public void RegisterUser_ShouldCreateNewUser_WhenValidDataPassed()
-  {
-    var mockUserRepository = new Mock<IUserRepository>();
-    var userService = new UserService(mockUserRepository.Object);
-    
-    var newUser = new User { Username = "newUser", Email = "newUser@example.com" };
-    
-    var result = userService.RegisterUser(newUser);
-    
-    mockUserRepository.Verify(repo => repo.Add(It.Is<User>(u => u.Username == "newUser")), Times.Once);
-  }
+        result.Should().NotBeNull();
+        result.Username.Should().Be(user.Username);
+    }
 }

@@ -1,41 +1,50 @@
 using Xunit;
 using Moq;
+using MyApp.Services;
+using MyApp.Repositories;
 using FluentAssertions;
-using MyApplication.Services;
-using MyApplication.Repositories;
 
-public class UserServiceTests
-{
+public class UserServiceTests {
     private readonly Mock<IUserRepository> _userRepositoryMock;
     private readonly UserService _userService;
 
-    public UserServiceTests()
-    {
+    public UserServiceTests() {
         _userRepositoryMock = new Mock<IUserRepository>();
         _userService = new UserService(_userRepositoryMock.Object);
     }
 
     [Fact]
-    public async Task GetUserById_ShouldReturnUser_WhenUserExists()
-    {
-        var userId = 1;
-        var user = new User { Id = userId, Username = "testuser", Email = "testuser@example.com" };
-        _userRepositoryMock.Setup(repo => repo.GetUserByIdAsync(userId)).ReturnsAsync(user);
+    public void Should_RegisterUser_Successfully() {
+        // Arrange
+        var userModel = new UserModel {
+            Username = "testuser",
+            Email = "test@example.com"
+        };
 
-        var result = await _userService.GetUserByIdAsync(userId);
+        _userRepositoryMock.Setup(repo => repo.AddUser(It.IsAny<UserModel>())).ReturnsAsync(true);
+        
+        // Act
+        var result = await _userService.Register(userModel);
 
-        result.Should().NotBeNull();
-        result.Username.Should().Be("testuser");
+        // Assert
+        result.Should().BeTrue();
+        _userRepositoryMock.Verify(repo => repo.AddUser(It.Is<UserModel>(user => user.Email == "test@example.com")), Times.Once);
     }
 
     [Fact]
-    public async Task GetUserById_ShouldReturnNull_WhenUserDoesNotExist()
-    {
-        var userId = 1;
-        _userRepositoryMock.Setup(repo => repo.GetUserByIdAsync(userId)).ReturnsAsync((User)null);
+    public void Should_FailToRegister_UserWhenEmailExists() {
+        // Arrange
+        var userModel = new UserModel {
+            Username = "existinguser",
+            Email = "exist@example.com"
+        };
 
-        var result = await _userService.GetUserByIdAsync(userId);
+        _userRepositoryMock.Setup(repo => repo.AddUser(It.IsAny<UserModel>())).Throws(new DuplicateEmailException());
+        
+        // Act
+        Func<Task> act = async () => await _userService.Register(userModel);
 
-        result.Should().BeNull();
+        // Assert
+        await act.Should().ThrowAsync<DuplicateEmailException>();
     }
 }

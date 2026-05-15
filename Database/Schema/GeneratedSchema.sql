@@ -1,0 +1,52 @@
+CREATE TABLE Users (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Username NVARCHAR(100) NOT NULL UNIQUE,
+    PasswordHash NVARCHAR(255) NOT NULL,
+    Email NVARCHAR(255) NOT NULL UNIQUE,
+    CreatedDate DATETIME2 DEFAULT GETDATE(),
+    CreatedAt DATETIME2 DEFAULT GETDATE(),
+    UpdatedAt DATETIME2 DEFAULT GETDATE(),
+    IsDeleted BIT DEFAULT 0
+);
+GO
+CREATE INDEX IDX_Users_Email ON Users(Email);
+GO
+
+CREATE TABLE Roles (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    RoleName NVARCHAR(50) NOT NULL UNIQUE,
+    CreatedAt DATETIME2 DEFAULT GETDATE(),
+    UpdatedAt DATETIME2 DEFAULT GETDATE(),
+    IsDeleted BIT DEFAULT 0
+);
+GO
+
+CREATE TABLE UserRoles (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    UserId INT NOT NULL,
+    RoleId INT NOT NULL,
+    CreatedAt DATETIME2 DEFAULT GETDATE(),
+    UpdatedAt DATETIME2 DEFAULT GETDATE(),
+    IsDeleted BIT DEFAULT 0,
+    CONSTRAINT FK_UserRoles_Users FOREIGN KEY (UserId) REFERENCES Users(Id) ON DELETE CASCADE,
+    CONSTRAINT FK_UserRoles_Roles FOREIGN KEY (RoleId) REFERENCES Roles(Id) ON DELETE CASCADE
+);
+GO
+CREATE INDEX IDX_UserRoles_UserId ON UserRoles(UserId);
+GO
+
+CREATE TABLE RefreshTokens (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    UserId INT NOT NULL,
+    Token NVARCHAR(255) NOT NULL,
+    ExpirationDate DATETIME2 NOT NULL,
+    CreatedAt DATETIME2 DEFAULT GETDATE(),
+    UpdatedAt DATETIME2 DEFAULT GETDATE(),
+    IsDeleted BIT DEFAULT 0,
+    CONSTRAINT FK_RefreshTokens_Users FOREIGN KEY (UserId) REFERENCES Users(Id) ON DELETE CASCADE
+);
+GO
+CREATE INDEX IDX_RefreshTokens_UserId ON RefreshTokens(UserId);
+GO
+
+-- Procedures analysed: usp_RefreshToken, usp_UserLogin, usp_UserRegister

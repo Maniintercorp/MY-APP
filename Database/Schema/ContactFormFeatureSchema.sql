@@ -1,0 +1,12 @@
+CREATE TABLE Contacts (
+    Id INT PRIMARY KEY IDENTITY,
+    Name NVARCHAR(100),
+    Email NVARCHAR(100),
+    Message NVARCHAR(MAX),
+    CreatedAt DATETIME2 DEFAULT GETDATE(),
+    UpdatedAt DATETIME2 DEFAULT GETDATE(),
+    IsDeleted BIT DEFAULT 0
+);
+
+CREATE INDEX IDX_Contacts_Email ON Contacts(Email);
+GO

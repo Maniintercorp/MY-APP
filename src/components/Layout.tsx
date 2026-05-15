@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+<<<<<<< HEAD
 import { User } from 'lucide-react';
+=======
+import { UserCircle } from 'lucide-react';
+>>>>>>> 31f24afbd74987b042d98fd9181b003d66ce1a4b
 
 const navLinks = [
   { name: 'Dashboard', path: '/dashboard' },
@@ -34,7 +38,11 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           >
             ☰
           </button>
+<<<<<<< HEAD
           <User className="text-gray-900" size={28} />
+=======
+          <UserCircle className="text-gray-900" size={28} />
+>>>>>>> 31f24afbd74987b042d98fd9181b003d66ce1a4b
         </header>
         <main className="flex-1 overflow-y-auto p-4">
           {children}

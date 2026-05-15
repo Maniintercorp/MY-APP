@@ -6,6 +6,7 @@ import { DashboardPage } from '@/pages/DashboardPage';
 
 export const App: React.FC = () => {
   return (
+<<<<<<< HEAD
     <Routes>
       <Route path="/" element={<LoginAndSignupSplitPanelPage />} />
       <Route
@@ -17,5 +18,13 @@ export const App: React.FC = () => {
         }
       />
     </Routes>
+=======
+    <Layout>
+      <Routes>
+        <Route path="/" element={<LoginAndSignupSplitPanelPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
+      </Routes>
+    </Layout>
+>>>>>>> 31f24afbd74987b042d98fd9181b003d66ce1a4b
   );
 };

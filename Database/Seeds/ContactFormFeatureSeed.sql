@@ -1,0 +1,1 @@
+-- No seed data for Contacts as it's a user-driven form submission.

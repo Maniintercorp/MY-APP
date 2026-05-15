@@ -1,3 +1,4 @@
+
 CREATE TABLE Users (
     Id INT IDENTITY(1,1) PRIMARY KEY,
     Username NVARCHAR(100) NOT NULL UNIQUE,
@@ -21,18 +22,15 @@ CREATE TABLE Roles (
 );
 GO
 
-CREATE TABLE UserRoles (
+CREATE TABLE SQLScriptValidationResults (
     Id INT IDENTITY(1,1) PRIMARY KEY,
-    UserId INT NOT NULL,
-    RoleId INT NOT NULL,
+    UploadedAt DATETIME2 DEFAULT GETDATE(),
+    IsValid BIT NOT NULL,
+    ValidationErrors NVARCHAR(MAX) NULL,
     CreatedAt DATETIME2 DEFAULT GETDATE(),
     UpdatedAt DATETIME2 DEFAULT GETDATE(),
-    IsDeleted BIT DEFAULT 0,
-    CONSTRAINT FK_UserRoles_Users FOREIGN KEY (UserId) REFERENCES Users(Id) ON DELETE CASCADE,
-    CONSTRAINT FK_UserRoles_Roles FOREIGN KEY (RoleId) REFERENCES Roles(Id) ON DELETE CASCADE
+    IsDeleted BIT DEFAULT 0
 );
-GO
-CREATE INDEX IDX_UserRoles_UserId ON UserRoles(UserId);
 GO
 
 CREATE TABLE RefreshTokens (
@@ -49,4 +47,18 @@ GO
 CREATE INDEX IDX_RefreshTokens_UserId ON RefreshTokens(UserId);
 GO
 
--- Procedures analysed: usp_RefreshToken, usp_UserLogin, usp_UserRegister
+CREATE TABLE UserRoles (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    UserId INT NOT NULL,
+    RoleId INT NOT NULL,
+    CreatedAt DATETIME2 DEFAULT GETDATE(),
+    UpdatedAt DATETIME2 DEFAULT GETDATE(),
+    IsDeleted BIT DEFAULT 0,
+    CONSTRAINT FK_UserRoles_Users FOREIGN KEY (UserId) REFERENCES Users(Id) ON DELETE CASCADE,
+    CONSTRAINT FK_UserRoles_Roles FOREIGN KEY (RoleId) REFERENCES Roles(Id) ON DELETE CASCADE
+);
+GO
+CREATE INDEX IDX_UserRoles_UserId ON UserRoles(UserId);
+GO
+
+-- Procedures analysed: usp_AddSQLScriptValidationResult, usp_DeleteSQLScriptValidationResult, usp_GetSQLScriptValidationResults, usp_RefreshToken, usp_UpdateSQLScriptValidationResult, usp_UserLogin, usp_UserRegister

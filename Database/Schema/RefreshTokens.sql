@@ -1,0 +1,11 @@
+CREATE TABLE RefreshTokens (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    UserId INT NOT NULL,
+    Token NVARCHAR(255) NOT NULL,
+    ExpirationDate DATETIME2 NOT NULL,
+    CreatedAt DATETIME2 DEFAULT GETDATE(),
+    UpdatedAt DATETIME2 DEFAULT GETDATE(),
+    IsDeleted BIT DEFAULT 0,
+    CONSTRAINT FK_RefreshTokens_Users FOREIGN KEY (UserId) REFERENCES Users(Id) ON DELETE CASCADE
+);
+CREATE INDEX IDX_RefreshTokens_UserId ON RefreshTokens(UserId);

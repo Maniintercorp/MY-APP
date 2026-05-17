@@ -1,9 +1,10 @@
 import {{ Routes, Route, Navigate }} from 'react-router-dom';
-import { LanguageSettingsPage } from '@/features/MultilingualSupport/pages/LanguageSettingsPage.tsx';
+import { LoginPage } from '@/features/LoginPageLanguageDropdown/pages/LoginPage.tsx';
 
 export const App = () => (
   <Routes>
-    <Route path="/" element={<Navigate to="/languagesettings" replace />} />
-        <Route path="/languagesettings" element={<LanguageSettingsPage />} />
+    <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/login" element={<LoginPage />} />
   </Routes>
 );
+export default App;

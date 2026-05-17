@@ -1,0 +1,25 @@
+{
+  "page": {
+    "title": "Multilingual support",
+    "subtitle": "Switch languages, persist preferences, and preview localized formatting for dates, numbers, currency, validation, and app messages."
+  },
+  "selector": {
+    "label": "Choose language",
+    "description": "Select your preferred application language.",
+    "currentLanguage": "Current language: {{language}}"
+  },
+  "status": {
+    "activeLanguage": "Active language",
+    "fallbackLanguage": "Fallback language",
+    "resourceState": "Translation resources",
+    "ready": "Ready"
+  },
+  "demo": {
+    "title": "Localized UI preview",
+    "description": "These examples update immediately when the active language changes.",
+    "date": "Date",
+    "number": "Number",
+    "currency": "Currency",
+    "validationSuccess": "The localized form was submitted successfully."
+  }
+}

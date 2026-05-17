@@ -1,0 +1,6 @@
+{
+  "required": "{{field}} is required.",
+  "email": "Enter a valid email address.",
+  "minLength": "{{field}} must be at least {{count}} characters.",
+  "unsupportedLanguage": "This language is unavailable. The fallback language has been applied."
+}

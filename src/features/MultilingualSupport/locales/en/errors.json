@@ -1,0 +1,7 @@
+{
+  "generic": "Something went wrong. Please try again.",
+  "loadLocales": "Unable to load supported languages.",
+  "loadTranslations": "Unable to load translation resources. Fallback translations are being used.",
+  "switchLanguage": "Unable to save the selected language. The local preference was still updated.",
+  "missingTranslation": "Translation is missing for this key."
+}

@@ -1,0 +1,23 @@
+{
+  "app": {
+    "name": "Application",
+    "description": "Un espace de travail SaaS professionnel"
+  },
+  "buttons": {
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "retry": "Réessayer",
+    "submit": "Envoyer",
+    "loading": "Chargement..."
+  },
+  "forms": {
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "displayName": "Nom d’affichage"
+  },
+  "language": "Langue",
+  "messages": {
+    "saved": "Vos modifications ont été enregistrées."
+  }
+}

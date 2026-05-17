@@ -1,0 +1,25 @@
+{
+  "page": {
+    "title": "Soporte multilingüe",
+    "subtitle": "Cambia idiomas, conserva preferencias y previsualiza formatos localizados de fechas, números, moneda, validación y mensajes de la aplicación."
+  },
+  "selector": {
+    "label": "Elegir idioma",
+    "description": "Selecciona el idioma preferido de la aplicación.",
+    "currentLanguage": "Idioma actual: {{language}}"
+  },
+  "status": {
+    "activeLanguage": "Idioma activo",
+    "fallbackLanguage": "Idioma de respaldo",
+    "resourceState": "Recursos de traducción",
+    "ready": "Listo"
+  },
+  "demo": {
+    "title": "Vista previa de interfaz localizada",
+    "description": "Estos ejemplos se actualizan inmediatamente cuando cambia el idioma activo.",
+    "date": "Fecha",
+    "number": "Número",
+    "currency": "Moneda",
+    "validationSuccess": "El formulario localizado se envió correctamente."
+  }
+}

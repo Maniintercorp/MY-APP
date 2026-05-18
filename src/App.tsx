@@ -1,5 +1,5 @@
 import {{ Routes, Route, Navigate }} from 'react-router-dom';
-import { LoginPage } from '@/features/LoginPageLanguageDropdown/pages/LoginPage.tsx';
+import { LoginPage } from '@/features/LoginUIStyleUpdate/pages/LoginPage.tsx';
 
 export const App = () => (
   <Routes>

@@ -1,0 +1,18 @@
+IF OBJECT_ID('dbo.Users', 'U') IS NOT NULL DROP TABLE dbo.Users;
+GO
+CREATE TABLE dbo.Users (
+    Id UNIQUEIDENTIFIER NOT NULL CONSTRAINT PK_Users PRIMARY KEY,
+    Username NVARCHAR(50) NOT NULL,
+    Email NVARCHAR(100) NOT NULL,
+    PasswordHash NVARCHAR(255) NOT NULL,
+    CreatedAt DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
+    UpdatedAt DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
+    IsDeleted BIT NOT NULL DEFAULT 0,
+    CONSTRAINT UQ_Users_Username UNIQUE (Username),
+    CONSTRAINT UQ_Users_Email UNIQUE (Email)
+);
+GO
+CREATE INDEX IX_Users_Username ON dbo.Users (Username);
+GO
+CREATE INDEX IX_Users_Email ON dbo.Users (Email);
+GO

@@ -1,0 +1,2 @@
+// auto-stub
+export {};

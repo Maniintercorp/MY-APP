@@ -1,0 +1,23 @@
+{
+  "app": {
+    "name": "App",
+    "description": "A professional SaaS workspace"
+  },
+  "buttons": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "retry": "Retry",
+    "submit": "Submit",
+    "loading": "Loading..."
+  },
+  "forms": {
+    "email": "Email",
+    "password": "Password",
+    "displayName": "Display name"
+  },
+  "language": "Language",
+  "messages": {
+    "saved": "Your changes have been saved."
+  }
+}

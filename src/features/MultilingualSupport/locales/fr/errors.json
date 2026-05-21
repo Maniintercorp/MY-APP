@@ -1,0 +1,7 @@
+{
+  "generic": "Une erreur est survenue. Veuillez réessayer.",
+  "loadLocales": "Impossible de charger les langues prises en charge.",
+  "loadTranslations": "Impossible de charger les ressources de traduction. Les traductions de secours sont utilisées.",
+  "switchLanguage": "Impossible d’enregistrer la langue sélectionnée. La préférence locale a tout de même été mise à jour.",
+  "missingTranslation": "La traduction est manquante pour cette clé."
+}

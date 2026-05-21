@@ -1,0 +1,6 @@
+{
+  "required": "{{field}} es obligatorio.",
+  "email": "Introduce una dirección de correo válida.",
+  "minLength": "{{field}} debe tener al menos {{count}} caracteres.",
+  "unsupportedLanguage": "Este idioma no está disponible. Se aplicó el idioma de respaldo."
+}

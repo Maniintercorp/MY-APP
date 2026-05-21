@@ -1,0 +1,9 @@
+{
+  "dashboard": "Panel",
+  "feature": "Función",
+  "settings": "Configuración",
+  "languageSettings": "Configuración de idioma",
+  "multilingualSupport": "Soporte multilingüe",
+  "signIn": "Iniciar sesión",
+  "register": "Registrarse"
+}

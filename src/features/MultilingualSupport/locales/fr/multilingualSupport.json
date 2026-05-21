@@ -1,0 +1,25 @@
+{
+  "page": {
+    "title": "Support multilingue",
+    "subtitle": "Changez de langue, conservez les préférences et prévisualisez les formats localisés pour les dates, les nombres, les devises, la validation et les messages de l’application."
+  },
+  "selector": {
+    "label": "Choisir la langue",
+    "description": "Sélectionnez la langue préférée de l’application.",
+    "currentLanguage": "Langue actuelle : {{language}}"
+  },
+  "status": {
+    "activeLanguage": "Langue active",
+    "fallbackLanguage": "Langue de secours",
+    "resourceState": "Ressources de traduction",
+    "ready": "Prêt"
+  },
+  "demo": {
+    "title": "Aperçu de l’interface localisée",
+    "description": "Ces exemples se mettent à jour immédiatement lorsque la langue active change.",
+    "date": "Date",
+    "number": "Nombre",
+    "currency": "Devise",
+    "validationSuccess": "Le formulaire localisé a été envoyé avec succès."
+  }
+}

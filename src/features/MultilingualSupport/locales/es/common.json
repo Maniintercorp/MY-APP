@@ -1,0 +1,23 @@
+{
+  "app": {
+    "name": "Aplicación",
+    "description": "Un espacio de trabajo SaaS profesional"
+  },
+  "buttons": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "retry": "Reintentar",
+    "submit": "Enviar",
+    "loading": "Cargando..."
+  },
+  "forms": {
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "displayName": "Nombre visible"
+  },
+  "language": "Idioma",
+  "messages": {
+    "saved": "Tus cambios se han guardado."
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "generic": "Algo salió mal. Inténtalo de nuevo.",
+  "loadLocales": "No se pudieron cargar los idiomas compatibles.",
+  "loadTranslations": "No se pudieron cargar las traducciones. Se están usando traducciones de respaldo.",
+  "switchLanguage": "No se pudo guardar el idioma seleccionado. La preferencia local se actualizó de todos modos.",
+  "missingTranslation": "Falta la traducción para esta clave."
+}

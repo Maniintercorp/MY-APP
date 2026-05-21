@@ -1,10 +1,10 @@
 import {{ Routes, Route, Navigate }} from 'react-router-dom';
-import { LoginPage } from '@/features/LoginUIStyleUpdate/pages/LoginPage.tsx';
+import { LoginRegistrationPage } from '@/features/LoginRegistrationPage/pages/LoginRegistrationPage.tsx';
 
 export const App = () => (
   <Routes>
-    <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="/login" element={<LoginPage />} />
+    <Route path="/" element={<Navigate to="/loginregistration" replace />} />
+        <Route path="/loginregistration" element={<LoginRegistrationPage />} />
   </Routes>
 );
 export default App;

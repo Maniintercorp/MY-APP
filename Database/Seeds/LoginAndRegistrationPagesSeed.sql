@@ -1,0 +1,1 @@
+-- No static lookup/reference seed data needed for Users table.
